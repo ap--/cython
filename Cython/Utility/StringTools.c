@@ -773,7 +773,11 @@ static CYTHON_INLINE char __Pyx_PyBytes_GetItemInt(PyObject* bytes, Py_ssize_t i
             return (char) -1;
         }
     }
-    return PyBytes_AS_STRING(bytes)[index];
+    #if CYTHON_ASSUME_SAFE_MACROS && CYTHON_ASSUME_SAFE_SIZE
+        return PyBytes_AS_STRING(bytes)[index];
+    #else
+        return PyBytes_AsString(bytes)[index];
+    #endif
 }
 
 
