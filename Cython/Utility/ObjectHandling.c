@@ -658,8 +658,8 @@ static CYTHON_INLINE int __Pyx_PyObject_SetSlice(PyObject* obj, PyObject* value,
         Py_ssize_t cstart, Py_ssize_t cstop,
         PyObject** _py_start, PyObject** _py_stop, PyObject** _py_slice,
         int has_cstart, int has_cstop, int wraparound) {
-    __Pyx_TypeName obj_type_name;
 #if CYTHON_USE_TYPE_SLOTS
+    __Pyx_TypeName obj_type_name;
     PyMappingMethods* mp = Py_TYPE(obj)->tp_as_mapping;
     CYTHON_UNUSED_VAR(wraparound);
 {{if access == 'Get'}}
@@ -718,6 +718,7 @@ static CYTHON_INLINE int __Pyx_PyObject_SetSlice(PyObject* obj, PyObject* value,
         }
         return result;
     }
+#if CYTHON_USE_TYPE_SLOTS
     obj_type_name = __Pyx_PyType_GetName(Py_TYPE(obj));
     PyErr_Format(PyExc_TypeError,
 {{if access == 'Get'}}
@@ -727,6 +728,7 @@ static CYTHON_INLINE int __Pyx_PyObject_SetSlice(PyObject* obj, PyObject* value,
         obj_type_name, value ? "assignment" : "deletion");
 {{endif}}
     __Pyx_DECREF_TypeName(obj_type_name);
+#endif
 
 bad:
     return {{if access == 'Get'}}NULL{{else}}-1{{endif}};
